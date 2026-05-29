@@ -1,26 +1,154 @@
 @import "tailwindcss";
 
+@theme {
+  --color-accent: #B0FC38;
+  --color-matte-black: #050505;
+  --color-dark-surface: #0a0a0a;
+  --color-card-bg: #121212;
+  --color-border-glow: rgba(176, 252, 56, 0.15);
+  --font-serif: var(--font-cormorant), serif;
+  --font-sans: var(--font-outfit), sans-serif;
+  --font-display: var(--font-playfair), serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #050505;
+  --foreground: #ffffff;
+  --accent: #B0FC38;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  cursor: none; /* Hide default cursor for custom cursor */
+}
+
+/* Fallback for devices without cursor or touch screens */
+@media (hover: none) {
+  body {
+    cursor: auto;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f1f1f;
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B0FC38;
+  box-shadow: 0 0 10px #B0FC38;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-glow {
+  background: rgba(18, 18, 18, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(176, 252, 56, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 15px rgba(176, 252, 56, 0.05);
+}
+
+/* Accent Neon Glow Effects */
+.glow-accent {
+  text-shadow: 0 0 15px rgba(176, 252, 56, 0.5);
+}
+
+.glow-box {
+  box-shadow: 0 0 20px rgba(176, 252, 56, 0.2);
+}
+
+.glow-box-strong {
+  box-shadow: 0 0 30px rgba(176, 252, 56, 0.4), inset 0 0 15px rgba(176, 252, 56, 0.2);
+}
+
+/* Noise overlay animation */
+@keyframes noise-anim {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -1%); }
+  20% { transform: translate(-2%, 1%); }
+  30% { transform: translate(1%, -2%); }
+  40% { transform: translate(-1%, 3%); }
+  50% { transform: translate(-2%, 1%); }
+  60% { transform: translate(3%, -1%); }
+  70% { transform: translate(2%, 1%); }
+  80% { transform: translate(-1%, -1%); }
+  90% { transform: translate(1%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  animation: noise-anim 1s steps(10) infinite;
+}
+
+/* Text Masking Reveal Animations */
+.char-reveal {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+/* Hide default map scroll zoom overlay */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Magnetic Button transition support */
+.magnetic-btn {
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Custom transitions */
+.transition-smooth {
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Marquee Scroll Animations */
+@keyframes marquee-scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+@keyframes marquee-scroll-right {
+  0% { transform: translateX(-33.333%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+  animation: marquee-scroll-left linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-scroll-right linear infinite;
+}
+
+/* Pause marquee on hover */
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
 }
