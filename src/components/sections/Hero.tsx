@@ -78,7 +78,8 @@ export default function Hero() {
           className="mb-6 md:mb-10 max-h-[720px]:mb-3"
         >
           <p className="text-[10px] md:text-xs uppercase tracking-[0.5em] text-accent font-semibold">
-            Photopedia Weddings by Kiran Sanil
+            Photopedia Weddings by{" "}
+            <span className="whitespace-nowrap">Kiran Sanil</span>
           </p>
         </motion.div>
 

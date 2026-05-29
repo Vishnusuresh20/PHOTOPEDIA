@@ -7,12 +7,23 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
+  // True if the device has touch capability — cursor should be hidden
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   // Position of the mouse
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
   useEffect(() => {
+    // Detect touch devices once on mount
+    const hasTouchScreen =
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0;
+    if (hasTouchScreen) {
+      setIsTouchDevice(true);
+      return; // Skip all mouse listeners on touch devices
+    }
+
     const moveCursor = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -22,17 +33,21 @@ export default function CustomCursor() {
     const handleMouseDown = () => setIsClicking(true);
     const handleMouseUp = () => setIsClicking(false);
 
-    const handleMouseEnter = () => {
-      setIsHovered(true);
-    };
+    const handleMouseEnter = () => setIsHovered(true);
+    const handleMouseLeave = () => setIsHovered(false);
 
-    const handleMouseLeave = () => {
-      setIsHovered(false);
+    // Hide cursor immediately if the user touches the screen
+    // (handles hybrid devices like tablets with keyboards)
+    const handleTouch = () => {
+      setIsVisible(false);
+      mouseX.set(-100);
+      mouseY.set(-100);
     };
 
     window.addEventListener("mousemove", moveCursor);
     window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchstart", handleTouch, { passive: true });
 
     // Dynamic hover targets
     const updateHoverTargets = () => {
@@ -58,6 +73,7 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", moveCursor);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchstart", handleTouch);
       observer.disconnect();
       const targets = document.querySelectorAll(
         'a, button, [role="button"], input, textarea, select, .hover-target, [data-hover]'
@@ -69,7 +85,8 @@ export default function CustomCursor() {
     };
   }, [mouseX, mouseY, isVisible]);
 
-  if (typeof window === "undefined" || !isVisible) return null;
+  // Never render on touch/mobile devices
+  if (typeof window === "undefined" || isTouchDevice || !isVisible) return null;
 
   return (
     <>
@@ -80,9 +97,9 @@ export default function CustomCursor() {
           x: mouseX,
           y: mouseY,
           scale: isHovered ? 2.2 : isClicking ? 0.6 : 1,
-          boxShadow: isHovered 
-            ? "0 0 15px #B0FC38, 0 0 30px #B0FC38" 
-            : "0 0 8px #B0FC38"
+          boxShadow: isHovered
+            ? "0 0 15px #B0FC38, 0 0 30px #B0FC38"
+            : "0 0 8px #B0FC38",
         }}
         transition={{ type: "spring", stiffness: 450, damping: 28 }}
       />
