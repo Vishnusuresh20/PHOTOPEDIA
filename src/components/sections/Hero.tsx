@@ -47,6 +47,7 @@ export default function Hero() {
           loop
           muted
           playsInline
+          preload="auto"
           className="object-cover w-full h-full"
         >
           <source
