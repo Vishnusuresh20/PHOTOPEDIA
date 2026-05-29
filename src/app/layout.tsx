@@ -38,11 +38,13 @@ export const metadata: Metadata = {
     siteName: "Photopedia Weddings",
     locale: "en_US",
     type: "website",
+    images: ["/previeww.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kiran Sanil | Photopedia Weddings",
     description: "Capturing Timeless Love Stories Through the Lens.",
+    images: ["/previeww.png"],
   },
 };
 
