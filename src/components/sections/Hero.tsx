@@ -48,7 +48,6 @@ export default function Hero() {
           muted
           playsInline
           className="object-cover w-full h-full"
-          poster="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1920"
         >
           <source
             src="/hero.mp4"
